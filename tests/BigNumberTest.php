@@ -1,53 +1,64 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-$autoloader = require __DIR__ ."/../vendor/autoload.php";
-$autoloader->addPsr4('SkyEng\\', __DIR__.'/../');
+use SkyEng\BigNumber;
 
 class BigNumberTest extends TestCase
 {
     public function testSumOfTwoDigits()
     {
-        $this->assertEquals("3", SkyEng\BigNumber::Sum("1", "2"));
+        $this->assertEquals(new BigNumber("3"), (new BigNumber("1"))->Sum(new BigNumber("2")));
     }
 
-    public function testSumOfTwoNum()
+    public function testSumOfTwoNumbers()
     {
-        $this->assertEquals("46", SkyEng\BigNumber::Sum("12", "34"));
+        $this->assertEquals(new BigNumber("46"), (new BigNumber("12"))->Sum(new BigNumber("34")));
     }
 
-    public function testSumOfNumAndDigit()
+    public function testSumOfNumberAndDigit()
     {
-        $this->assertEquals("16", SkyEng\BigNumber::Sum("12", "4"));
+        $this->assertEquals(new BigNumber("16"), (new BigNumber("12"))->Sum(new BigNumber("4")));
     }
 
-    public function testBigNum()
+    public function testDigitOverflow()
     {
-        $this->assertEquals("51", SkyEng\BigNumber::Sum("12", "39"));
+        $this->assertEquals(new BigNumber("51"), (new BigNumber("12"))->Sum(new BigNumber("39")));
     }
 
-    public function testBigNum2()
+    public function testNumberLengthOverflow()
     {
-        $this->assertEquals("114", SkyEng\BigNumber::Sum("75", "39"));
+        $this->assertEquals(new BigNumber("114"), (new BigNumber("75"))->Sum(new BigNumber("39")));
+    }
+
+    public function testSub()
+    {
+        $this->assertEquals(new BigNumber("27"), (new BigNumber("39"))->Sum(new BigNumber("-12")));
+    }
+
+    public function testShrinkString()
+    {
+        $this->assertEquals(new BigNumber("-3"), (new BigNumber("9"))->Sum(new BigNumber("-12")));
+    }
+
+    public function testSubInversion()
+    {
+        $this->assertEquals(new BigNumber("-27"), (new BigNumber("-39"))->Sum(new BigNumber("12")));
     }
 
     public function testSumOfNegativeNumbers()
     {
-        $this->assertEquals("27", SkyEng\BigNumber::Sum("39", "-12"));
+        $this->assertEquals(new BigNumber("-51"), (new BigNumber("-39"))->Sum(new BigNumber("-12")));
     }
 
-    public function testSumOfNegativeNumbers1()
+    public function testIncorrectValue()
     {
-        $this->assertEquals("-3", SkyEng\BigNumber::Sum("9", "-12"));
+        $this->expectException(InvalidArgumentException::class);
+        new BigNumber("123-13");
     }
 
-    public function testSumOfNegativeNumbers2()
+    public function testEmptyValue()
     {
-        $this->assertEquals("-27", SkyEng\BigNumber::Sum("-39", "12"));
-    }
-
-    public function testSumOfNegativeNumbers3()
-    {
-        $this->assertEquals("-51", SkyEng\BigNumber::Sum("-39", "-12"));
+        $this->expectException(InvalidArgumentException::class);
+        new BigNumber("");
     }
 }
