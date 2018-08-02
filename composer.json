@@ -1,0 +1,12 @@
+{
+  "name": "SkyEng/BigNumber",
+  "description": "Библиотека для работы с большими числами",
+  "require-dev": {
+    "phpunit/phpunit": "^6"
+  },
+  "autoload": {
+    "psr-4": {
+      "SkyEng\\": "./"
+    }
+  }
+}
